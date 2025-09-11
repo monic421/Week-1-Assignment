@@ -1,3 +1,5 @@
+"use strict";
+
 // sample data - expanded Star Wars characters with varied ages
 const users = [
   { id: 1, name: "Luke Skywalker", age: 23 },
