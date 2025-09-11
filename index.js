@@ -1,8 +1,6 @@
-"use strict";
-
 // sample data - expanded Star Wars characters with varied ages
 const users = [
-  { id: 1, name: "Luke Skywalker" age: 23 },
+  { id: 1, name: "Luke Skywalker", age: 23 },
   { id: 2, name: "Darth Vader", age: 45 },
   { id: 3, name: "Princess Leia", age: 23 },
   { id: 4, name: "Obi-Wan Kenobi", age: 57 },
@@ -27,3 +25,59 @@ const users = [
 // 5. Add error handling to your functions that will log an error message using console.error() if any object doesn't have a "name" property. Display any error messages in the div with id "error-messages"
 
 // 6. Test your error handling by creating a second array that's intentionally broken (missing name properties) and passing it to your functions. Verify that your error handling works correctly and displays errors in the div with id "broken-array-errors"
+
+//answer
+function renderList(array, elementId, errorElementId = null){
+  const list = document.getElementById(elementId);
+  const errorDiv = errorElementId ? document.getElementById(errorElementId) : null
+  list.innerHTML = "";
+  if(errorDiv) errorDiv.innerHTML = "";
+
+  array.forEach((item) => {
+    try{
+      if(!item.name){
+        throw new Error(`Object with id ${item.id} is missing "name" property`);
+      }
+      console.log(item.name);
+      const li = document.createElement("li");
+      li.textContent = item.name;
+      list.appendChild(li);
+    } catch (err) {
+      console.error(err.message);
+      if (errorDiv) {
+        const p = document.createElement("p");
+        p.classList.add("error-message");
+        p.textContent = err.message;
+        errorDiv.appendChild(p);
+      }
+    }
+  });
+}
+
+//exercise 1
+renderList(users, "names-list");
+
+//exercise 2
+const youngCharacters = users.filter((u) => u.age < 40);
+renderList(youngCharacters, "young-characters-list");
+
+//exercise 3
+renderList(users, "function-list");
+
+//exercise 4
+function filterAge(array, threshold){
+  return array.filter((u) => u.age < threshold);
+}
+const under50 = filterAge(users, 50);
+renderList(under50, "age-filter-list");
+
+//exercise 5
+renderList(users, "error-handling-list", "error-messages");
+
+//exercise 6
+const brokenUsers = [
+  { id: 1, age: 23},
+  { id: 2, name: "Ryan Mark"},
+  { id: 3}
+]
+renderList(brokenUsers, "broken-array-list", "broken-array-errors")
